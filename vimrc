@@ -1,3 +1,9 @@
+if has("win32")
+  set shell=cmd
+  set shellcmdflag=/c
+  set shellxquote=\"
+endif
+
 set nocompatible              " be iMproved
 filetype off                  " required!
 
@@ -11,6 +17,7 @@ Bundle 'gmarik/vundle'
 " My bundles here:
 "
 " original repos on GitHub
+Bundle 'majutsushi/tagbar'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-fugitive'
@@ -20,12 +27,12 @@ Bundle 'tpope/vim-repeat'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
-Bundle 'majutsushi/tagbar'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/nerdcommenter'
 Bundle 'kien/ctrlp.vim'
 Bundle 'rking/ag.vim'
 Bundle 'kana/vim-textobj-user'
@@ -38,17 +45,30 @@ Bundle 'Raimondi/delimitMate'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'vim-scripts/python_match.vim'
+"Bundle 'ervandew/supertab'
+
+" UltiSnips
+let s:python_ver = 0
+silent! python import sys, vim;
+\ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
+
+" Python plugin bundles
+if (has('python') || has('python3')) && s:python_ver >= 260
+  Bundle 'SirVer/ultisnips'
+endif
+" UltiSnips
+
 "
 " Sinpmate related bundles
 "
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
-
-" Optional:
-Bundle "honza/vim-snippets"
-" End Snipmate related
+"Bundle "MarcWeber/vim-addon-mw-utils"
+"Bundle "tomtom/tlib_vim"
+"Bundle "garbas/vim-snipmate"
 "
+" Optional:
+"Bundle "honza/vim-snippets"
+"" End Snipmate related
+""
 
 " vim-scripts repos
 Bundle 'L9'
@@ -98,6 +118,49 @@ set wildignore=*.swp,*.bak,*.pyc,*.class
 set undolevels=1000
 set visualbell
 set noerrorbells
+
+"let g:tagbar_ctags_bin="C:\\apps\\ctags58\\ctags58\\ctags.exe"
+function! ToggleNERDTreeAndTagbar()
+    let w:jumpbacktohere = 1
+
+    " Detect which plugins are open
+    if exists('t:NERDTreeBufName')
+        let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
+    else
+        let nerdtree_open = 0
+    endif
+    let tagbar_open = bufwinnr('__Tagbar__') != -1
+
+    " Perform the appropriate action
+    if nerdtree_open && tagbar_open
+        NERDTreeClose
+        TagbarClose
+    elseif nerdtree_open
+        TagbarOpen
+    elseif tagbar_open
+        NERDTree
+    else
+        NERDTree
+        TagbarOpen
+    endif
+
+    " Jump back to the original window
+    for window in range(1, winnr('$'))
+        execute window . 'wincmd w'
+        if exists('w:jumpbacktohere')
+            unlet w:jumpbacktohere
+            break
+        endif
+    endfor
+endfunction
+nnoremap <leader>n :call ToggleNERDTreeAndTagbar()<CR>
+
+"" YouCompleteMe
+let g:ycm_key_list_previous_completion=['<Up>']
+
+"" Ultisnips
+let g:UltiSnips#ExpandTrigger="<c-tab>"
+let g:UltiSnips#ListSnippets="<c-s-tab>"
 
 " format the entire file$
 nnoremap <leader>fef gg=G''
@@ -182,7 +245,7 @@ nmap <leader>s<up>     :leftabove  new<cr>
 nmap <leader>s<down>   :rightbelow new<cr>
 
 " Tab between buffers
-noremap <tab> <c-w><c-w>
+" noremap <tab> <c-w><c-w>
 
 " Switch between last two buffers
 nnoremap <leader><leader> <C-^>
@@ -196,7 +259,7 @@ if bufwinnr(1)
 endif
 
 " NERDTree
-nmap <leader>n :NERDTreeToggle<CR>
+"nmap <leader>n :NERDTreeToggle<CR>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
