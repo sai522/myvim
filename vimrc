@@ -31,6 +31,7 @@ Bundle 'rking/ag.vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'slim-template/vim-slim'
+Bundle 'ap/vim-css-color'
 Bundle 'pangloss/vim-javascript'
 Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'Raimondi/delimitMate'
@@ -70,7 +71,6 @@ filetype plugin indent on     " required!
 " NOTE: comments after Bundle commands are not allowed.
 let mapleader=","
 
-color jellybeans
 
 set cursorline
 set expandtab
@@ -123,14 +123,14 @@ map <C-H> <C-W>h<C-W>_
 " Solarized Colorscheme Config
 " ------------------------------------------------------------------
 "let g:solarized_italic=0    "default value is 1
-syntax enable
-if has('gui_running') 
-  set background=dark
-else
-  set background=dark
-endif
-let g:solarized_italic=0    "default value is 1
-let g:solarized_termcolors=256
+"syntax enable
+"if has('gui_running') 
+"  set background=dark
+"else
+"  set background=dark
+"endif
+"let g:solarized_italic=0    "default value is 1
+"let g:solarized_termcolors=256
 "colorscheme solarized
 " ------------------------------------------------------------------
 
@@ -231,6 +231,7 @@ silent! nnoremap <unique> <silent> <Leader>f :CtrlPFiletype<CR>
 
 " MacVim GUI mode
 if has("gui_macvim")
+  color jellybeans
   set guifont=Monaco:h13
   set guioptions=aAce
   set fuoptions=maxvert,maxhorz
@@ -251,5 +252,6 @@ if has("gui_macvim")
   " when resizing MacVim window
   autocmd VimResized * wincmd =
 elseif has("gui_running")
+  color jellybeans
   set guifont=Consolas:h12
 endif
