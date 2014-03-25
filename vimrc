@@ -17,8 +17,9 @@ Bundle 'gmarik/vundle'
 " My bundles here:
 "
 " original repos on GitHub
+Bundle 'godlygeek/csapprox'
 Bundle 'majutsushi/tagbar'
-Bundle 'tpope/vim-sensible'
+"Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
