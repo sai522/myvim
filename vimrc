@@ -46,6 +46,10 @@ Bundle 'Raimondi/delimitMate'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'vim-scripts/python_match.vim'
+Bundle 'neowit/vim-force.com'
+Bundle 'vim-scripts/Get-Win32-Short-Name'
+Bundle 'marijnh/tern_for_vim'
+Bundle 'terryma/vim-multiple-cursors'
 "Bundle 'ervandew/supertab'
 
 " UltiSnips
@@ -157,11 +161,31 @@ endfunction
 nnoremap <leader>n :call ToggleNERDTreeAndTagbar()<CR>
 
 "" YouCompleteMe
-let g:ycm_key_list_previous_completion=['<Up>']
+"let g:ycm_key_list_previous_completion=['<Up>']
 
 "" Ultisnips
-let g:UltiSnips#ExpandTrigger="<c-tab>"
-let g:UltiSnips#ListSnippets="<c-s-tab>"
+"let g:UltiSnips#ExpandTrigger="<c-tab>"
+"let g:UltiSnips#ListSnippets="<c-s-tab>"
+
+function! g:UltiSnips_Complete()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips#JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
+endfunction
+
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
+
 
 " format the entire file$
 nnoremap <leader>fef gg=G''
@@ -319,3 +343,24 @@ elseif has("gui_running")
   color jellybeans
   set guifont=Consolas:h12
 endif
+
+" Force.com Stuff
+" 
+if has("win32")
+	let g:apex_tooling_force_dot_com_path = "c:\\apps\\apex\\toolling-force.com-0.1.3.jar"
+ 	if !exists("g:apex_backup_folder")
+ 		" full path required here, relative may not work
+ 		let g:apex_backup_folder="c:\\temp\\apex\\backup"
+ 	endif
+ 	if !exists("g:apex_temp_folder")
+ 		" full path required here, relative may not work
+ 		let g:apex_temp_folder="c:\\temp\\apex\\gvim-deployment"
+ 	endif
+ 	if !exists("g:apex_properties_folder")
+ 		" full path required here, relative may not work
+ 		let g:apex_properties_folder="c:\\projects\\vim-force.com\\secure-properties"
+ 	endif
+ 	let g:apex_binary_tee = "c:\\cygwin64\\bin\\tee.exe"
+ 	let g:apex_binary_touch = "c:\\cygwin64\\bin\\touch.exe"
+ endif	
+
