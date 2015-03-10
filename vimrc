@@ -17,20 +17,21 @@ Bundle 'gmarik/vundle'
 " My bundles here:
 "
 " original repos on GitHub
-Bundle 'godlygeek/csapprox'
+"Bundle 'godlygeek/csapprox'
 Bundle 'majutsushi/tagbar'
 "Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
+"Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-rake'
+Bundle 'tpope/vim-speeddating'
 Bundle 'tpope/vim-repeat'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nanotech/jellybeans.vim'
-Bundle 'Lokaltog/vim-powerline'
+Bundle 'Lokaltog/powerline', {'rtp': 'pwerline/bindngs/vim'}
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
@@ -46,16 +47,21 @@ Bundle 'Raimondi/delimitMate'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'vim-scripts/python_match.vim'
-Bundle 'neowit/vim-force.com'
-Bundle 'vim-scripts/Get-Win32-Short-Name'
-Bundle 'marijnh/tern_for_vim'
+"Bundle 'neowit/vim-force.com'
+"Bundle 'marijnh/tern_for_vim'
 Bundle 'terryma/vim-multiple-cursors'
-"Bundle 'ervandew/supertab'
+Bundle 'ivanov/vim-ipython'
+Bundle 'klen/python-mode'
+Bundle 'jmcantrell/vim-virtualenv'
+
+"
+"Turn off python mode auto complete
+let g:pymode_rope_complete_on_dot = 0
 
 " UltiSnips
 let s:python_ver = 0
 silent! python import sys, vim;
-\ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
+      \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
 
 " Python plugin bundles
 if (has('python') || has('python3')) && s:python_ver >= 260
@@ -94,21 +100,31 @@ filetype plugin indent on     " required!
 "
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
+"
 let mapleader=","
 
 
+"Sai Settings
 set cursorline
-set expandtab
+set expandtab       "Use softtabstop spaces instead of tab characters for indentation
+set shiftwidth=4    "Indent by 4 spaces when using >>, <<, == etc.
+set softtabstop=4   "Indent by 4 spaces when pressing <TAB>
+
+set autoindent      "Keep indentation from previous line
+set smartindent     "Automatically inserts indentation in some cases
+set cindent         "Like smartindent, but stricter and more customisable
+if has ("autocmd")
+  " File type detection. Indent based on filetype. Recommended.
+  filetype plugin indent on
+endif
+
 set modelines=0
-set shiftwidth=2
 set clipboard=unnamed
 set synmaxcol=128
 set ttyscroll=10
 set encoding=utf-8
-set tabstop=2
 set nowrap
 set number
-set expandtab
 set nowritebackup
 set noswapfile
 set nobackup
@@ -116,7 +132,6 @@ set hlsearch
 set ignorecase
 set smartcase
 
-"Sai Settings
 set showmatch
 set incsearch
 set wildignore=*.swp,*.bak,*.pyc,*.class
@@ -124,39 +139,50 @@ set undolevels=1000
 set visualbell
 set noerrorbells
 
-"let g:tagbar_ctags_bin="C:\\apps\\ctags58\\ctags58\\ctags.exe"
+" Powerline setup
+source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+set guifont=Inconsolata\ for\ Powerline:h14
+"set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+let g:Powerline_symbols = 'fancy'
+set encoding=utf-8
+set t_Co=256
+set fillchars+=stl:\ ,stlnc:\
+set term=xterm-256color
+set termencoding=utf-8
+set laststatus=2
+
 function! ToggleNERDTreeAndTagbar()
-    let w:jumpbacktohere = 1
+  let w:jumpbacktohere = 1
 
-    " Detect which plugins are open
-    if exists('t:NERDTreeBufName')
-        let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
-    else
-        let nerdtree_open = 0
+  " Detect which plugins are open
+  if exists('t:NERDTreeBufName')
+    let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
+  else
+    let nerdtree_open = 0
+  endif
+  let tagbar_open = bufwinnr('__Tagbar__') != -1
+
+  " Perform the appropriate action
+  if nerdtree_open && tagbar_open
+    NERDTreeClose
+    TagbarClose
+  elseif nerdtree_open
+    TagbarOpen
+  elseif tagbar_open
+    NERDTree
+  else
+    NERDTree
+    TagbarOpen
+  endif
+
+  " Jump back to the original window
+  for window in range(1, winnr('$'))
+    execute window . 'wincmd w'
+    if exists('w:jumpbacktohere')
+      unlet w:jumpbacktohere
+      break
     endif
-    let tagbar_open = bufwinnr('__Tagbar__') != -1
-
-    " Perform the appropriate action
-    if nerdtree_open && tagbar_open
-        NERDTreeClose
-        TagbarClose
-    elseif nerdtree_open
-        TagbarOpen
-    elseif tagbar_open
-        NERDTree
-    else
-        NERDTree
-        TagbarOpen
-    endif
-
-    " Jump back to the original window
-    for window in range(1, winnr('$'))
-        execute window . 'wincmd w'
-        if exists('w:jumpbacktohere')
-            unlet w:jumpbacktohere
-            break
-        endif
-    endfor
+  endfor
 endfunction
 nnoremap <leader>n :call ToggleNERDTreeAndTagbar()<CR>
 
@@ -168,18 +194,18 @@ nnoremap <leader>n :call ToggleNERDTreeAndTagbar()<CR>
 "let g:UltiSnips#ListSnippets="<c-s-tab>"
 
 function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        if pumvisible()
-            return "\<C-n>"
-        else
-            call UltiSnips#JumpForwards()
-            if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
-            endif
-        endif
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res == 0
+    if pumvisible()
+      return "\<C-n>"
+    else
+      call UltiSnips#JumpForwards()
+      if g:ulti_jump_forwards_res == 0
+        return "\<TAB>"
+      endif
     endif
-    return ""
+  endif
+  return ""
 endfunction
 
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
@@ -210,16 +236,16 @@ map <C-H> <C-W>h<C-W>_
 " ------------------------------------------------------------------
 " Solarized Colorscheme Config
 " ------------------------------------------------------------------
-"let g:solarized_italic=0    "default value is 1
-"syntax enable
-"if has('gui_running') 
-"  set background=dark
-"else
-"  set background=dark
-"endif
-"let g:solarized_italic=0    "default value is 1
-"let g:solarized_termcolors=256
-"colorscheme solarized
+let g:solarized_italic=0    "default value is 1
+syntax enable
+if has('gui_running') 
+  set background=dark
+else
+  set background=dark
+endif
+let g:solarized_italic=0    "default value is 1
+let g:solarized_termcolors=256
+colorscheme solarized
 " ------------------------------------------------------------------
 
 " The following items are available options, but do not need to be
@@ -319,8 +345,14 @@ silent! nnoremap <unique> <silent> <Leader>f :CtrlPFiletype<CR>
 
 " MacVim GUI mode
 if has("gui_macvim")
-  color jellybeans
-  set guifont=Monaco:h13
+  "color jellybeans
+  "set guifont=Monaco:h13
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+    set guifont=Inconsolata\ for\ Powerline:h15
+  else
+    set guifont=Monaco:h13
+  endif
   set guioptions=aAce
   set fuoptions=maxvert,maxhorz
   set noballooneval
@@ -340,27 +372,9 @@ if has("gui_macvim")
   " when resizing MacVim window
   autocmd VimResized * wincmd =
 elseif has("gui_running")
-  color jellybeans
-  set guifont=Consolas:h12
+  "color jellybeans
+  set guifont=Inconsolata\ for\ Powerline:h15
+  "set guifont=Consolas:h12
 endif
-
-" Force.com Stuff
-" 
-if has("win32")
-	let g:apex_tooling_force_dot_com_path = "c:\\apps\\apex\\toolling-force.com-0.1.3.jar"
- 	if !exists("g:apex_backup_folder")
- 		" full path required here, relative may not work
- 		let g:apex_backup_folder="c:\\temp\\apex\\backup"
- 	endif
- 	if !exists("g:apex_temp_folder")
- 		" full path required here, relative may not work
- 		let g:apex_temp_folder="c:\\temp\\apex\\gvim-deployment"
- 	endif
- 	if !exists("g:apex_properties_folder")
- 		" full path required here, relative may not work
- 		let g:apex_properties_folder="c:\\projects\\vim-force.com\\secure-properties"
- 	endif
- 	let g:apex_binary_tee = "c:\\cygwin64\\bin\\tee.exe"
- 	let g:apex_binary_touch = "c:\\cygwin64\\bin\\touch.exe"
- endif	
+"set transparency=35
 
