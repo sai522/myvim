@@ -6,9 +6,16 @@ endif
 
 set nocompatible              " be iMproved
 filetype off                  " required!
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+"set rtp+=~/.vim/bundle/vundle/
+"call vundle#rc()
 
 " let Vundle manage Vundle
 " required! 
@@ -53,6 +60,7 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'ivanov/vim-ipython'
 Bundle 'klen/python-mode'
 Bundle 'jmcantrell/vim-virtualenv'
+"Bundle 'jlanzarotta/bufexplorer.vim'
 
 "
 "Turn off python mode auto complete
@@ -89,7 +97,7 @@ Bundle 'FuzzyFinder'
 " Git repos on your local machine (i.e. when working on your own plugin)
 " Bundle 'file:///Users/gmarik/path/to/plugin'
 " ...
-
+call vundle#end()            " required
 filetype plugin indent on     " required!
 "
 " Brief help
@@ -236,14 +244,14 @@ map <C-H> <C-W>h<C-W>_
 " ------------------------------------------------------------------
 " Solarized Colorscheme Config
 " ------------------------------------------------------------------
-let g:solarized_italic=0    "default value is 1
+"let g:solarized_italic=0    "default value is 1
 syntax enable
 if has('gui_running') 
   set background=dark
 else
   set background=dark
 endif
-let g:solarized_italic=0    "default value is 1
+"let g:solarized_italic=0    "default value is 1
 let g:solarized_termcolors=256
 colorscheme solarized
 " ------------------------------------------------------------------
@@ -349,7 +357,7 @@ if has("gui_macvim")
   "set guifont=Monaco:h13
   let s:uname = system("uname")
   if s:uname == "Darwin\n"
-    set guifont=Inconsolata\ for\ Powerline:h15
+    set guifont=Inconsolata\ for\ Powerline:h18
   else
     set guifont=Monaco:h13
   endif
