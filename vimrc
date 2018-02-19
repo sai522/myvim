@@ -14,105 +14,62 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"set rtp+=~/.vim/bundle/vundle/
-"call vundle#rc()
-
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
+"Bundle 'gmarik/vundle'
 
 " My bundles here:
 "
 " original repos on GitHub
-"Bundle 'godlygeek/csapprox'
-Bundle 'majutsushi/tagbar'
-"Bundle 'tpope/vim-sensible'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-fugitive'
-"Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-rake'
-Bundle 'tpope/vim-speeddating'
-Bundle 'tpope/vim-repeat'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'tpope/vim-rails.git'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'nanotech/jellybeans.vim'
-Bundle 'Lokaltog/powerline', {'rtp': 'pwerline/bindngs/vim'}
-Bundle 'scrooloose/syntastic'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'kien/ctrlp.vim'
-Bundle 'rking/ag.vim'
-Bundle 'kana/vim-textobj-user'
-Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'slim-template/vim-slim'
-Bundle 'ap/vim-css-color'
-Bundle 'pangloss/vim-javascript'
-Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'Raimondi/delimitMate'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'tsaleh/vim-matchit'
-Bundle 'vim-scripts/python_match.vim'
-"Bundle 'neowit/vim-force.com'
-"Bundle 'marijnh/tern_for_vim'
-Bundle 'terryma/vim-multiple-cursors'
-Bundle 'ivanov/vim-ipython'
-Bundle 'klen/python-mode'
-Bundle 'jmcantrell/vim-virtualenv'
-"Bundle 'jlanzarotta/bufexplorer.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-speeddating'
+Plugin 'tpope/vim-repeat'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'kien/ctrlp.vim'
+Plugin 'rking/ag.vim'
+Plugin 'kana/vim-textobj-user'
+Plugin 'ap/vim-css-color'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'Raimondi/delimitMate'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'jmcantrell/vim-virtualenv'
 
-"
-"Turn off python mode auto complete
-let g:pymode_rope_complete_on_dot = 0
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
-" UltiSnips
-let s:python_ver = 0
-silent! python import sys, vim;
-      \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
+"Plugin 'jlanzarotta/bufexplorer.vim'
+"Plugin 'shougo/neocomplete.vim'
+"Plugin 'Shougo/dein.vim'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'roxma/nvim-yarp'
+Plugin 'roxma/vim-hug-neovim-rpc'
 
-" Python plugin bundles
-if (has('python') || has('python3')) && s:python_ver >= 260
-  Bundle 'SirVer/ultisnips'
-endif
-" UltiSnips
-
-"
-" Sinpmate related bundles
-"
-"Bundle "MarcWeber/vim-addon-mw-utils"
-"Bundle "tomtom/tlib_vim"
-"Bundle "garbas/vim-snipmate"
-"
-" Optional:
-"Bundle "honza/vim-snippets"
-"" End Snipmate related
-""
-
+Plugin 'zchee/deoplete-jedi'
 " vim-scripts repos
 Bundle 'L9'
 Bundle 'FuzzyFinder'
-" non-GitHub repos
-" Bundle 'git://git.wincent.com/command-t.git'
-" Git repos on your local machine (i.e. when working on your own plugin)
-" Bundle 'file:///Users/gmarik/path/to/plugin'
-" ...
 call vundle#end()            " required
 filetype plugin indent on     " required!
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
+let g:python_host_prog = '/usr/bin/python3'
+let g:python3_host_prog = '/usr/bin/python3'
 "
 let mapleader=","
 
+"call dein#add('Shougo/deoplete.nvim')
+"if !has('nvim')
+"  call dein#add('roxma/nvim-yarp')
+"  call dein#add('roxma/vim-hug-neovim-rpc')
+"endif
 
 "Sai Settings
+"
 set cursorline
 set expandtab       "Use softtabstop spaces instead of tab characters for indentation
 set shiftwidth=4    "Indent by 4 spaces when using >>, <<, == etc.
@@ -146,12 +103,17 @@ set wildignore=*.swp,*.bak,*.pyc,*.class
 set undolevels=1000
 set visualbell
 set noerrorbells
-
+"Indent guide setup
+let g:indent_guides_enable_on_vim_startup = 1
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
 " Powerline setup
-source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
+"source /usr/local/lib/python2.7/site-packages/powerline/bindings/vim/plugin/powerline.vim
 set guifont=Inconsolata\ for\ Powerline:h14
 "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 let g:Powerline_symbols = 'fancy'
+let g:airline_solarized_bg='dark'
+let g:airline#extensions#tabline#enabled = 1
 set encoding=utf-8
 set t_Co=256
 set fillchars+=stl:\ ,stlnc:\
@@ -193,33 +155,6 @@ function! ToggleNERDTreeAndTagbar()
   endfor
 endfunction
 nnoremap <leader>n :call ToggleNERDTreeAndTagbar()<CR>
-
-"" YouCompleteMe
-"let g:ycm_key_list_previous_completion=['<Up>']
-
-"" Ultisnips
-"let g:UltiSnips#ExpandTrigger="<c-tab>"
-"let g:UltiSnips#ListSnippets="<c-s-tab>"
-
-function! g:UltiSnips_Complete()
-  call UltiSnips#ExpandSnippet()
-  if g:ulti_expand_res == 0
-    if pumvisible()
-      return "\<C-n>"
-    else
-      call UltiSnips#JumpForwards()
-      if g:ulti_jump_forwards_res == 0
-        return "\<TAB>"
-      endif
-    endif
-  endif
-  return ""
-endfunction
-
-au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-e>"
-
 
 " format the entire file$
 nnoremap <leader>fef gg=G''
@@ -321,10 +256,6 @@ endif
 "nmap <leader>n :NERDTreeToggle<CR>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
-
-" Syntastic
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
 
 " CtrlP
 "nnoremap <silent> t :CtrlPBuffer<cr>
